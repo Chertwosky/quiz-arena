@@ -1,0 +1,11 @@
+services:
+  quiz:
+    image: python:3.12-alpine
+    working_dir: /app
+    command: python server.py
+    ports:
+      - "8088:8088"
+    volumes:
+      - ./:/app
+    environment:
+      PORT: "8088"
