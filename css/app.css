@@ -367,7 +367,7 @@ a { color: var(--accent); text-decoration: none; }
 .comment { color: var(--muted); }
 
 .score-panel, .auction-teams { display: grid; gap: 8px; margin: 16px 0; }
-.verdict-row, .auction-row {
+.verdict-row {
   display: grid;
   grid-template-columns: 1fr auto auto;
   gap: 8px;
@@ -376,6 +376,24 @@ a { color: var(--accent); text-decoration: none; }
   border-radius: 12px;
   background: color-mix(in srgb, var(--bg) 50%, transparent);
   border-left: 6px solid var(--team);
+}
+.auction-row {
+  display: grid;
+  grid-template-columns: minmax(90px, 1fr) auto minmax(88px, 120px) auto auto auto;
+  gap: 8px;
+  align-items: center;
+  padding: 10px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--bg) 50%, transparent);
+  border-left: 6px solid var(--team);
+}
+.auction-input {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid color-mix(in srgb, var(--text) 16%, transparent);
+  background: color-mix(in srgb, var(--bg) 70%, black);
+  border-radius: 12px;
+  padding: 8px 10px;
 }
 
 .verdict-row button, .auction-row button, .team-pick-btn {
@@ -568,4 +586,6 @@ a { color: var(--accent); text-decoration: none; }
   .board { gap: 6px; }
   .cat-head, .cell { min-height: 48px; border-radius: 10px; font-size: 12px; }
   .game-top { flex-wrap: wrap; }
+  .auction-row { grid-template-columns: 1fr 1fr; }
+  .auction-row b { grid-column: 1 / -1; }
 }

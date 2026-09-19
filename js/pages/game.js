@@ -128,7 +128,7 @@ function renderRound(pack, session) {
     return overlay(`
       <p class="eyebrow">Аукцион</p>
       <h2>Ставка: ${round.auctionBid}</h2>
-      <p class="lede">Номинал ${found.question.value}. Ведущий поднимает ставку за команду или пасует её.</p>
+      <p class="lede">Номинал ${found.question.value}. Можно вписать ставку вручную или поднимать по 100.</p>
       <div class="auction-teams">
         ${session.teams
           .map((team) => {
@@ -137,6 +137,8 @@ function renderRound(pack, session) {
             return `<div class="auction-row ${passed ? "is-passed" : ""} ${lead ? "is-lead" : ""}" style="--team:${team.color}">
               <b>${escapeHtml(team.name)}</b>
               <span>${team.score}</span>
+              <input class="auction-input" data-bid-input="${team.id}" type="number" min="${found.question.value}" step="50" inputmode="numeric" placeholder="ставка" ${passed ? "disabled" : ""}>
+              <button data-bid-set="${team.id}" ${passed ? "disabled" : ""}>Поставить</button>
               <button data-bid="${team.id}" ${passed ? "disabled" : ""}>+100</button>
               <button data-pass-auction="${team.id}" ${passed ? "disabled" : ""}>Пас</button>
             </div>`;
@@ -368,15 +370,29 @@ function bindRound(root, pack, session) {
   root.querySelectorAll("[data-bid]").forEach((button) => {
     button.addEventListener("click", () => {
       const team = session.teams.find((item) => item.id === button.dataset.bid);
-      const step = 100;
-      const next = (round.auctionBid || faceValue(pack, round)) + step;
-      if (team.score < next && team.score > 0) {
-        round.auctionBid = Math.max(faceValue(pack, round), team.score);
-      } else {
-        round.auctionBid = next;
-      }
-      round.auctionTeamId = team.id;
-      round.auctionPassed = round.auctionPassed.filter((id) => id !== team.id);
+      const next = (round.auctionBid || faceValue(pack, round)) + 100;
+      applyAuctionBid(round, pack, team, next);
+      saveSession(session);
+      renderGame(root, pack, session);
+    });
+  });
+
+  root.querySelectorAll("[data-bid-set]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const team = session.teams.find((item) => item.id === button.dataset.bidSet);
+      const input = root.querySelector(`[data-bid-input="${team.id}"]`);
+      applyAuctionBid(round, pack, team, input?.value);
+      saveSession(session);
+      renderGame(root, pack, session);
+    });
+  });
+
+  root.querySelectorAll("[data-bid-input]").forEach((input) => {
+    input.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter") return;
+      event.preventDefault();
+      const team = session.teams.find((item) => item.id === input.dataset.bidInput);
+      applyAuctionBid(round, pack, team, input.value);
       saveSession(session);
       renderGame(root, pack, session);
     });
@@ -494,6 +510,16 @@ function applyHostDelta(root, session, teamId, delta) {
 
 function faceValue(pack, round) {
   return questionById(pack, round.questionId).question.value;
+}
+
+function applyAuctionBid(round, pack, team, rawAmount) {
+  if (!team) return;
+  const face = faceValue(pack, round);
+  const amount = Math.round(Number(rawAmount));
+  if (!Number.isFinite(amount) || amount <= 0) return;
+  round.auctionBid = Math.max(face, amount);
+  round.auctionTeamId = team.id;
+  round.auctionPassed = round.auctionPassed.filter((id) => id !== team.id);
 }
 
 function chooseModifier(root, pack, session, modifierId) {

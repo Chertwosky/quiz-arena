@@ -4,7 +4,7 @@ import seedPacks from "./seed-packs.js";
 const PACKS_KEY = "quiz-arena:packs";
 const SESSION_KEY = "quiz-arena:session";
 const SEED_VERSION_KEY = "quiz-arena:seed-version";
-const SEED_VERSION = 2;
+const SEED_VERSION = 3;
 
 function read(key, fallback) {
   try {

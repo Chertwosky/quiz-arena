@@ -305,6 +305,7 @@ function kindOptions(current) {
     ["plain", "Обычный"],
     ["no_captain", "Без капитана"],
     ["captain_only", "Только капитан"],
+    ["skit", "Ответить сценкой"],
     ["double", "Двойная ставка"],
     ["all_in", "Ва-банк"],
     ["cat_bag", "Кот в мешке"],

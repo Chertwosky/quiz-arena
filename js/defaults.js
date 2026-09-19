@@ -17,10 +17,17 @@ export const DEFAULT_MODIFIERS = [
   },
   {
     id: "captain_only",
-    name: "Только капитан ×1.5",
+    name: "Только капитан ×1.7",
     description: "Отвечает исключительно капитан команды.",
-    multiplier: 1.5,
+    multiplier: 1.7,
     kind: "captain_only",
+  },
+  {
+    id: "skit",
+    name: "Ответить сценкой ×1.7",
+    description: "Игроки не называют ответ вслух, а отыгрывают его сценкой.",
+    multiplier: 1.7,
+    kind: "skit",
   },
   {
     id: "double",
