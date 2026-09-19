@@ -124,6 +124,31 @@ export default [
               "audio": null,
               "video": null
             }
+          },
+          {
+            "id": "dda94593-e8c8-41f3-8d01-b1934e10ca41",
+            "value": 500,
+            "prompt": "Назовите аниме",
+            "answer": "Твоя апрельская ложь",
+            "comment": "",
+            "media": {
+              "image": {
+                "fileId": "",
+                "name": "24a98f4c-2631-4981-9ceb-af50fb5761ad.png",
+                "url": "/media/demo-general/dda94593-e8c8-41f3-8d01-b1934e10ca41/question_image_eabb3283_24a98f4c-2631-4981-9ceb-af50fb5761ad.png"
+              },
+              "audio": null,
+              "video": null
+            },
+            "answerMedia": {
+              "image": {
+                "fileId": "",
+                "name": "images (17).jpg",
+                "url": "/media/demo-general/dda94593-e8c8-41f3-8d01-b1934e10ca41/answer_image_12641e04_images_17_.jpg"
+              },
+              "audio": null,
+              "video": null
+            }
           }
         ]
       },
@@ -677,9 +702,9 @@ export default [
       },
       {
         "id": "captain_only",
-        "name": "Только капитан ×1.5",
+        "name": "Только капитан ×1.7",
         "description": "Отвечает исключительно капитан команды.",
-        "multiplier": 1.5,
+        "multiplier": 1.7,
         "kind": "captain_only"
       },
       {
@@ -687,7 +712,8 @@ export default [
         "name": "Двойная ставка ×2",
         "description": "Верный ответ даёт удвоенные очки. Ошибка снимает удвоенную стоимость.",
         "multiplier": 2,
-        "kind": "double"
+        "kind": "double",
+        "wrongMultiplier": 2
       },
       {
         "id": "all_in",

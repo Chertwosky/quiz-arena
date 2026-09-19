@@ -3,6 +3,8 @@ import seedPacks from "./seed-packs.js";
 
 const PACKS_KEY = "quiz-arena:packs";
 const SESSION_KEY = "quiz-arena:session";
+const SEED_VERSION_KEY = "quiz-arena:seed-version";
+const SEED_VERSION = 2;
 
 function read(key, fallback) {
   try {
@@ -18,10 +20,12 @@ function write(key, value) {
 }
 
 export function ensurePacks() {
+  const storedVersion = Number(read(SEED_VERSION_KEY, 0) || 0);
   const packs = read(PACKS_KEY, null);
-  if (!packs || !packs.length) {
+  if (storedVersion !== SEED_VERSION || !packs || !packs.length) {
     const seeded = Array.isArray(seedPacks) && seedPacks.length ? structuredClone(seedPacks) : [createDemoPack()];
     write(PACKS_KEY, seeded);
+    write(SEED_VERSION_KEY, SEED_VERSION);
     return seeded;
   }
   return packs;
