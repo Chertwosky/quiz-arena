@@ -1,4 +1,4 @@
-import { getPacks, getSession } from "../store.js";
+import { getPacks, getSession, resetAnswers } from "../store.js";
 import { escapeHtml } from "../ui.js";
 import { go } from "../router.js";
 
@@ -22,10 +22,13 @@ export function renderHome(root) {
       </section>
       ${
         resumePack
-          ? `<button class="resume-card" data-resume>
-              <span>Продолжить «${escapeHtml(resumePack.branding.title)}»</span>
-              <small>${session.teams.length} команд · ${Object.keys(session.answered).length} сыгранных вопросов</small>
-            </button>`
+          ? `<div class="resume-card">
+              <button class="resume-main" data-resume>
+                <span>Продолжить «${escapeHtml(resumePack.branding.title)}»</span>
+                <small>${session.teams.length} команд · ${Object.keys(session.answered || {}).length} сыгранных вопросов</small>
+              </button>
+              <button class="ghost-btn" data-reset-answers type="button">Сбросить ответы</button>
+            </div>`
           : ""
       }
       <div class="pack-grid">
@@ -46,6 +49,13 @@ export function renderHome(root) {
 
   root.querySelector("[data-resume]")?.addEventListener("click", () => {
     go(session.phase === "teams" ? "/teams" : session.phase === "results" ? "/results" : "/play");
+  });
+  root.querySelector("[data-reset-answers]")?.addEventListener("click", (event) => {
+    event.stopPropagation();
+    if (!session) return;
+    if (!confirm("Сбросить все ответы и очки? Команды и вопросы останутся.")) return;
+    resetAnswers(session);
+    go("/play");
   });
   root.querySelectorAll("[data-pack]").forEach((button) => {
     button.addEventListener("click", () => go(`/login/${button.dataset.pack}`));

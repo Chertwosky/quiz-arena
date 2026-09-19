@@ -121,6 +121,22 @@ a { color: var(--accent); text-decoration: none; }
   align-items: center;
   gap: 12px;
 }
+.resume-main {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  background: none;
+  border: 0;
+  padding: 0;
+  text-align: left;
+  width: 100%;
+}
+.game-actions {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
 
 .login-stage {
   min-height: 100vh;

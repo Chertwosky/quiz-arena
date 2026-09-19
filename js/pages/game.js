@@ -1,4 +1,4 @@
-import { saveSession, appendScoreLog } from "../store.js";
+import { saveSession, appendScoreLog, resetAnswers } from "../store.js";
 import {
   escapeHtml,
   formatScore,
@@ -49,6 +49,7 @@ function renderBoard(pack, session) {
             <button class="ghost-btn" data-scroll-right type="button" title="Темы справа">→</button>
           </div>
           <button class="ghost-btn" data-open-adjust>Очки ведущего</button>
+          <button class="ghost-btn" data-reset-answers type="button">Сбросить ответы</button>
           <a class="ghost-btn" href="#/teams">Команды</a>
           <button class="ghost-btn" data-finish>Итоги</button>
         </div>
@@ -315,6 +316,12 @@ function bindBoard(root, pack, session) {
   });
   root.querySelector("[data-scroll-right]")?.addEventListener("click", () => {
     scroller?.scrollBy({ left: 280, behavior: "smooth" });
+  });
+
+  root.querySelector("[data-reset-answers]")?.addEventListener("click", () => {
+    if (!confirm("Сбросить все ответы и очки? Команды и вопросы останутся.")) return;
+    resetAnswers(session);
+    renderGame(root, pack, session);
   });
 
   root.querySelector("[data-finish]")?.addEventListener("click", () => {

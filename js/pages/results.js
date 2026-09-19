@@ -1,4 +1,4 @@
-import { clearSession, saveSession } from "../store.js";
+import { clearSession, resetAnswers } from "../store.js";
 import { escapeHtml } from "../ui.js";
 import { go } from "../router.js";
 
@@ -27,21 +27,14 @@ export function renderResults(root, pack, session) {
           .join("")}
       </ol>
       <div class="footer-actions">
-        <button class="primary-btn" id="again">Новая партия этим пакетом</button>
+        <button class="primary-btn" id="again">Сбросить ответы и сыграть снова</button>
         <button class="ghost-btn" id="home">К списку игр</button>
       </div>
     </div>
   `;
 
   root.querySelector("#again").addEventListener("click", () => {
-    session.teams.forEach((team) => {
-      team.score = 0;
-    });
-    session.answered = {};
-    session.round = null;
-    session.phase = "board";
-    session.pickerTeamId = session.teams[0]?.id || null;
-    saveSession(session);
+    resetAnswers(session);
     go("/play");
   });
 

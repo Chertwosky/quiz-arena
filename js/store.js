@@ -1,4 +1,5 @@
 import { createDemoPack } from "./defaults.js";
+import seedPacks from "./seed-packs.js";
 
 const PACKS_KEY = "quiz-arena:packs";
 const SESSION_KEY = "quiz-arena:session";
@@ -19,7 +20,7 @@ function write(key, value) {
 export function ensurePacks() {
   const packs = read(PACKS_KEY, null);
   if (!packs || !packs.length) {
-    const seeded = [createDemoPack()];
+    const seeded = Array.isArray(seedPacks) && seedPacks.length ? structuredClone(seedPacks) : [createDemoPack()];
     write(PACKS_KEY, seeded);
     return seeded;
   }
@@ -89,5 +90,17 @@ export function createSession(packId) {
     phase: "teams",
     round: null,
   };
+  return saveSession(session);
+}
+
+export function resetAnswers(session) {
+  session.answered = {};
+  session.round = null;
+  session.phase = "board";
+  session.scoreLog = [];
+  (session.teams || []).forEach((team) => {
+    team.score = 0;
+  });
+  session.pickerTeamId = session.teams[0]?.id || session.pickerTeamId;
   return saveSession(session);
 }

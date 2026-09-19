@@ -121,6 +121,9 @@ class Handler(SimpleHTTPRequestHandler):
             if self.path == "/api/copy":
                 self.handle_copy()
                 return
+            if self.path == "/api/seed-packs":
+                self.handle_seed_packs()
+                return
         except ValueError as exc:
             self._send_json(400, {"error": str(exc)})
             return
@@ -195,6 +198,15 @@ class Handler(SimpleHTTPRequestHandler):
         dest = dest_dir / stored
         dest.write_bytes(source.read_bytes())
         self._send_json(200, {"url": media_url(dest.relative_to(ROOT)), "name": source.name, "kind": kind})
+
+    def handle_seed_packs(self):
+        data = self._read_json()
+        packs = data.get("packs")
+        if not isinstance(packs, list) or not packs:
+            raise ValueError("packs required")
+        dest = ROOT / "js" / "seed-packs.js"
+        dest.write_text("export default " + json.dumps(packs, ensure_ascii=False, indent=2) + ";\n", encoding="utf-8")
+        self._send_json(200, {"ok": True, "count": len(packs), "path": "js/seed-packs.js"})
 
     def log_message(self, format, *args):
         print("[%s] %s" % (self.log_date_time_string(), format % args))
